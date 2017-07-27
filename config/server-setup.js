@@ -66,6 +66,20 @@ module.exports = function(app) {
     }
   );
 
+  app.use((req, res, next) => {
+    res.locals.onLoginScreen = false;
+    next();
+  });
+
+  // serve bootstrap
+  app.get('/bootstrap.js', (req, res) => res.sendFile(path.join(__dirname, '..', 'node_modules/bootstrap/dist/js/bootstrap.min.js')));
+
+  // serve jquery
+  app.get('/jquery.js', (req, res) => res.sendFile(path.join(__dirname, '..', 'node_modules/jquery/dist/jquery.min.js')));
+
+  // serve bootstrap css
+  app.get('/bootstrap.css', (req, res) => res.sendFile(path.join(__dirname, '..', 'node_modules/bootstrap/dist/css/bootstrap.css')));
+
   app.mongooseDB = mongoose;
   app.mongooseDB.connect(process.env.MONGO_CONNECTION_URL);
 

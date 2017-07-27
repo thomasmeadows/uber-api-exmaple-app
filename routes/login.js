@@ -1,5 +1,5 @@
 module.exports = function(app) {
   app.get('/login', (request, response) => {
-    response.render('login');
+    response.render('login', { onLoginScreen: true });
   });
 };
