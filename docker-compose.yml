@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  uber-api:
+    env_file: ./.env
+    command: "node app.js"
+    ports:
+      - "8000:8000"
+    volumes:
+      - "./:/src"
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    links:
+      - mongodb
+  mongodb:
+    image: mongo:3.0.5
+    ports:
+      - "27017:27017"
