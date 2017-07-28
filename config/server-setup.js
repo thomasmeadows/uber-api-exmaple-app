@@ -1,16 +1,15 @@
 const session = require('express-session');
 const passport = require('passport');
 const bodyParser = require('body-parser');
-const UberStrategy = require('passport-uber');
+
 const mongoose = require('mongoose');
 const path = require('path');
+const express = require('express');
 
 const setupMongoDBModels = require('../models');
+const serverSetupPassportUber = require('./server-setup-passport-uber');
 
-const UBER_CLIENT_ID = process.env.UBER_CLIENT_ID;
-const UBER_CLIENT_SECRET = process.env.UBER_CLIENT_SECRET;
 const EXPRESS_SESSION_SECRET = process.env.EXPRESS_SESSION_SECRET;
-const UBER_CALLBACK_URL = process.env.UBER_CALLBACK_URL;
 
 module.exports = function(app) {
   app.use(session({
@@ -33,43 +32,14 @@ module.exports = function(app) {
     done(null, user);
   });
 
-  passport.use(new UberStrategy({
-    clientID: UBER_CLIENT_ID,
-    clientSecret: UBER_CLIENT_SECRET,
-    callbackURL: UBER_CALLBACK_URL,
-  }, (accessToken, refreshToken, user, done) => {
-    // save the user on login otherwise update the user if they already exist
-    app.models.User.find({ rider_id: user.rider_id })
-    .then(userFound => {
-      if (userFound.length) {
-        return app.models.User.update({ _id: userFound[0]._id }, user);
-      }
-      return app.models.User.create(user);
-    });
-
-    user.accessToken = accessToken;
-    return done(null, user);
-  }));
-
-  app.get('/auth/uber',
-    passport.authenticate('uber',
-      { scope: [ 'profile', 'history', 'history_lite', 'request', 'request_receipt' ] }
-    )
-  );
-
-  // authentication callback redirects to /login if authentication failed or home if successful
-  app.get('/auth/uber/callback',
-    passport.authenticate('uber', {
-      failureRedirect: '/login'
-    }), (req, res) => {
-      res.redirect('/');
-    }
-  );
+  serverSetupPassportUber(app, passport);
 
   app.use((req, res, next) => {
     res.locals.onLoginScreen = false;
     next();
   });
+
+  app.use(express.static(path.join(__dirname, '..', 'public')));
 
   // serve bootstrap
   app.get('/bootstrap.js', (req, res) => res.sendFile(path.join(__dirname, '..', 'node_modules/bootstrap/dist/js/bootstrap.min.js')));
@@ -81,7 +51,9 @@ module.exports = function(app) {
   app.get('/bootstrap.css', (req, res) => res.sendFile(path.join(__dirname, '..', 'node_modules/bootstrap/dist/css/bootstrap.css')));
 
   app.mongooseDB = mongoose;
-  app.mongooseDB.connect(process.env.MONGO_CONNECTION_URL);
+  app.mongooseDB.connect(process.env.MONGODB_URI);
+
+  console.log('connection url', process.env.MONGODB_URI);
 
   setupMongoDBModels(app);
 };

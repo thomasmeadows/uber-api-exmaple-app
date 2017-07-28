@@ -9,6 +9,6 @@ configServer(app);
 
 configRoutes(app);
 
-app.listen(8000, () => {
-  console.log('listening to port: 8000');
+app.listen(Number(process.env.PORT), () => {
+  console.log(`listening to port: ${process.env.PORT}`);
 });

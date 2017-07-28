@@ -5,6 +5,8 @@
   "author": "Thomas Meadows",
   "license": "MIT",
   "dependencies": {
+    "axios": "^0.16.2",
+    "bluebird": "^3.5.0",
     "body-parser": "^1.17.2",
     "bootstrap": "4.0.0-alpha.6",
     "ejs": "^2.5.6",
@@ -15,7 +17,13 @@
     "passport": "^0.3.2",
     "passport-uber": "0.0.1"
   },
+  "engines": {
+    "node": ">=7.0"
+  },
   "devDependencies": {
     "eslint": "^4.3.0"
+  },
+  "scripts": {
+    "start": "node app.js"
   }
 }

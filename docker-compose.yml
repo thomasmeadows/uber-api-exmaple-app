@@ -12,7 +12,7 @@ services:
       context: .
       dockerfile: ./Dockerfile
     links:
-      - mongodb
+      - mongodb:mongodb
   mongodb:
     image: mongo:3.0.5
     ports:

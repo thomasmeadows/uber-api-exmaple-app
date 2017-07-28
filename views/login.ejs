@@ -1,5 +1,15 @@
 <%- include partials/head %>
 
-<a class="btn btn-primary" href="/auth/uber">Login with uber credentials</a>
+<video poster="ocean.jpg" playsinline autoplay muted loop>
+  <source id="bgvideo" src="ocean.mp4" type="video/mp4">
+</video>
+<div class="row">
+  <div class="offset-md-3"></div>
+  <div class="col-md-6 text-center" id="landing-page">
+    <h1>Uber History App</h1>
+    <p>Welcome to the uber history app. The Uber history app allows you to easily view your ride history on uber using google maps.  Just login with your uber credentials to get started.</p>
+    <a id="login-button" href="/auth/uber">Login with Uber <div id="login-button-loader" class="loader"></div></a>
+  </div>
+</div>
 
 <%- include partials/foot %>

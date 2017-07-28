@@ -10,4 +10,16 @@ Uber API Example with Express, Mongo, and EJS
 
 3) copy .example.env to .env and replace all environment variables with the ones retreived from uber's developer page.
 
-4) run docker-compose up
+4) run
+
+```bash
+  docker-compose run uber-api bash
+```
+
+    then run this in container
+
+```bash
+npm install; exit;
+```
+
+5) run docker-compose up
