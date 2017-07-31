@@ -15,7 +15,7 @@ module.exports = function(app) {
   homeRoute(app);
   profileRoute(app);
 
-  if (process.env.UBER_API_URL.includes('sandbox')) {
+  if (process.env.NODE_ENV === 'development') {
     // only inclue this route on development mode
     fakeRideRoute(app);
   };

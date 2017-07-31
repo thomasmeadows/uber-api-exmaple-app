@@ -1,7 +1,7 @@
 const session = require('express-session');
 const passport = require('passport');
 const bodyParser = require('body-parser');
-
+const promise = require('bluebird');
 const mongoose = require('mongoose');
 const path = require('path');
 const express = require('express');
@@ -12,6 +12,27 @@ const serverSetupPassportUber = require('./server-setup-passport-uber');
 const EXPRESS_SESSION_SECRET = process.env.EXPRESS_SESSION_SECRET;
 
 module.exports = function(app) {
+  if (process.env.NODE_ENV === 'development') {
+    /* eslint-disable */
+    const webpackDevMiddleware = require('webpack-dev-middleware');
+    const webpackConfig = require('../../webpack.config');
+    const webpack = require('webpack');
+    const webpackDevOptions = {
+      contentBase: path.join('..', '..'),
+      watchContentBase: true,
+      inline: true,
+      publicPath: '/',
+      historyApiFallback: true
+    };
+    webpackConfig.watch = true;
+    webpackConfig.entry.unshift('webpack-hot-middleware/client?reload=true');
+    webpackConfig.plugins.push(new webpack.HotModuleReplacementPlugin());
+    const webpackCompiler = webpack(webpackConfig);
+    app.use(webpackDevMiddleware(webpackCompiler, webpackDevOptions));
+    app.use(require('webpack-hot-middleware')(webpackCompiler));
+    /* eslint-enable */
+  }
+
   app.use(session({
     secret: EXPRESS_SESSION_SECRET,
     resave: false,
@@ -41,17 +62,9 @@ module.exports = function(app) {
 
   app.use(express.static(path.join(__dirname, '..', 'public')));
 
-  // serve bootstrap
-  app.get('/bootstrap.js', (req, res) => res.sendFile(path.join(__dirname, '..', 'node_modules/bootstrap/dist/js/bootstrap.min.js')));
-
-  // serve jquery
-  app.get('/jquery.js', (req, res) => res.sendFile(path.join(__dirname, '..', 'node_modules/jquery/dist/jquery.min.js')));
-
-  // serve bootstrap css
-  app.get('/bootstrap.css', (req, res) => res.sendFile(path.join(__dirname, '..', 'node_modules/bootstrap/dist/css/bootstrap.css')));
-
   app.mongooseDB = mongoose;
-  app.mongooseDB.connect(process.env.MONGODB_URI);
+  app.mongooseDB.Promise = promise;
+  app.mongooseDB.connect(process.env.MONGODB_URI, { useMongoClient: true });
 
   console.log('connection url', process.env.MONGODB_URI);
 

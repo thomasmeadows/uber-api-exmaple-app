@@ -3,7 +3,7 @@ version: '3'
 services:
   uber-api:
     env_file: ./.env
-    command: "node app.js"
+    command: "npm run dev"
     ports:
       - "8000:8000"
     volumes:

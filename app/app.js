@@ -1,13 +1,14 @@
-(function($){
+require('bootstrap');
 
+(($) => {
   function disableButtonAndShowLoader(buttonId, loaderId) {
     $(buttonId).addClass('disabled');
     $(buttonId).attr('disabled', 'disabled');
     $(loaderId).show();
   };
 
-  $('#sync-history-loader').hide();
   $('#login-button-loader').hide();
+  $('#sync-history-loader').hide();
 
   $('#login-button').click(() => {
     disableButtonAndShowLoader('#login-button', '#login-button-loader');
@@ -18,7 +19,7 @@
 
     function recursiveGetHistory(offset) {
       return $.ajax({
-        url: '/history-sync?limit=50&offset=' + offset
+        url: `/history-sync?limit=50&offset=${offset}`
       })
       .then(results => {
         if(results.history && results.history.length === 50) {
