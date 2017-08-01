@@ -5,6 +5,7 @@ const promise = require('bluebird');
 const mongoose = require('mongoose');
 const path = require('path');
 const express = require('express');
+const MongoDBStore = require('connect-mongodb-session')(session);
 
 const setupMongoDBModels = require('../models');
 const serverSetupPassportUber = require('./server-setup-passport-uber');
@@ -33,11 +34,19 @@ module.exports = function(app) {
     /* eslint-enable */
   }
 
-  app.use(session({
+  const sessionStore = new MongoDBStore({
+    uri: process.env.MONGODB_URI,
+    collection: 'UberSessions'
+  });
+
+  const expressSessionOptions = {
     secret: EXPRESS_SESSION_SECRET,
     resave: false,
+    store: sessionStore,
     saveUninitialized: true
-  }));
+  };
+
+  app.use(session(expressSessionOptions));
   app.use(passport.initialize());
   app.use(passport.session());
   app.set('views', path.join(__dirname, '..', '/views'));

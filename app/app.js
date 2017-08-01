@@ -7,9 +7,6 @@ require('bootstrap');
     $(loaderId).show();
   };
 
-  $('#login-button-loader').hide();
-  $('#sync-history-loader').hide();
-
   $('#login-button').click(() => {
     disableButtonAndShowLoader('#login-button', '#login-button-loader');
   });

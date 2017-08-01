@@ -71,11 +71,12 @@ video {
   border-top: 2px solid #3498db;
   width: 20px;
   height: 20px;
-  margin: 0px 5px;
+  margin: 2px 5px;
   float: right;
   clear: both;
   -webkit-animation: spin 2s linear infinite;
   animation: spin 2s linear infinite;
+  display: none;
 }
 
 @-webkit-keyframes spin {
