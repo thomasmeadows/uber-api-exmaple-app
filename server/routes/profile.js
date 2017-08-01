@@ -1,15 +1,16 @@
 const ensureAuthenticated = require('./policies/ensureAuthenticated');
 const uber = require('./helpers/uberapi');
+const { UBER, METHODS, VIEWS, ROUTES } = require('../config/constants');
 
 module.exports = function(app) {
-  app.get('/profile', ensureAuthenticated, (req, res) => {
+  app.get(ROUTES.PROFILE, ensureAuthenticated, (req, res) => {
     return uber({
-      method: 'GET',
-      url: '/v1/me',
+      method: METHODS.GET,
+      url: UBER.ROUTES.PROFILE,
       token: req.user.accessToken
     })
     .then(results => {
-      return res.render('profile', { uberProfile: results.data });
+      return res.render(VIEWS.PROFILE, { uberProfile: results.data });
     })
     .catch(err => {
       console.log('error', err);

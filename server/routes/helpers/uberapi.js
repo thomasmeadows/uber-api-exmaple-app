@@ -1,9 +1,11 @@
 const axios = require('axios');
 
+const { UBER } = require('../../config/constants');
+
 module.exports = function(config) {
   const request = {
     method: config.method,
-    baseURL: process.env.UBER_API_URL,
+    baseURL: UBER.API_URL,
     url: config.url,
     headers: {
       'Authorization': `Bearer ${config.token}`,

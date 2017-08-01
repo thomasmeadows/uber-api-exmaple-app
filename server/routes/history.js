@@ -1,17 +1,18 @@
 const ensureAuthenticated = require('./policies/ensureAuthenticated');
+const { ROUTES, VIEWS } = require('../config/constants');
 
 module.exports = function(app) {
-  app.get('/history', ensureAuthenticated, (req, res) => {
+  app.get(ROUTES.HISTORY, ensureAuthenticated, (req, res) => {
     return app.models.History.find({ user: req.user._id })
     .then(userHistoryFound => {
-      return res.render('history-table', Object.assign({ googleMapsToken: process.env.GOOGLE_MAPS_TOKEN }, { userHistory: userHistoryFound }));
+      return res.render(VIEWS.HISTORY, Object.assign({ googleMapsToken: process.env.GOOGLE_MAPS_TOKEN }, { userHistory: userHistoryFound }));
     });
   });
 
-  app.get('/history-map', ensureAuthenticated, (req, res) => {
+  app.get(ROUTES.HISTORY_MAP, ensureAuthenticated, (req, res) => {
     return app.models.History.find({ user: req.user._id })
     .then(userHistoryFound => {
-      return res.render('history-map', Object.assign({ googleMapsToken: process.env.GOOGLE_MAPS_TOKEN }, { userHistory: userHistoryFound }));
+      return res.render(VIEWS.HISTORY_MAP, Object.assign({ googleMapsToken: process.env.GOOGLE_MAPS_TOKEN }, { userHistory: userHistoryFound }));
     });
   });
 };

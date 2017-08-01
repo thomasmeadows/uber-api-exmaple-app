@@ -1,7 +1,8 @@
-// route middleware to make sure the request is from an authenticated user
+const { ROUTES } = require('../../config/constants');
+
 module.exports = function(request, response, next) {
   if (request.isAuthenticated()) {
     return next();
   }
-  return response.redirect('/login');
+  return response.redirect(ROUTES.LOGIN);
 };

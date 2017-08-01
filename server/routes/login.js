@@ -1,5 +1,7 @@
+const { ROUTES, VIEWS } = require('../config/constants');
+
 module.exports = function(app) {
-  app.get('/login', (request, response) => {
-    response.render('login', { onLoginScreen: true });
+  app.get(ROUTES.LOGIN, (request, response) => {
+    response.render(VIEWS.LOGIN, { onLoginScreen: true });
   });
 };

@@ -1,22 +1,18 @@
-const loginRoute = require('./login');
-const logoutRoute = require('./logout');
-const homeRoute = require('./home');
-const profileRoute = require('./profile');
-const historyRoute = require('./history');
-const historySyncRoute = require('./history-sync');
-const fakeRideRoute = require('./fake-ride');
+const login = require('./login');
+const logout = require('./logout');
+const home = require('./home');
+const profile = require('./profile');
+const history = require('./history');
+const api = require('./api');
 
 module.exports = function(app) {
-  loginRoute(app);
-  logoutRoute(app);
+  login(app);
+  logout(app);
 
-  historyRoute(app);
-  historySyncRoute(app);
-  homeRoute(app);
-  profileRoute(app);
+  history(app);
+  home(app);
+  profile(app);
 
-  if (process.env.NODE_ENV === 'development') {
-    // only inclue this route on development mode
-    fakeRideRoute(app);
-  };
+  // set up api for ajax calls
+  api(app);
 };

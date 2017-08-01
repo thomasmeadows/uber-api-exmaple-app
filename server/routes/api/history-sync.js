@@ -1,16 +1,18 @@
 const { URLSearchParams } = require('url');
 const promise = require('bluebird');
 
-const ensureAuthenticated = require('./policies/ensureAuthenticated');
-const uber = require('./helpers/uberapi');
+const ensureAuthenticated = require('../policies/ensureAuthenticated');
+const uber = require('../helpers/uberapi');
+
+const { ROUTES, METHODS, UBER } = require('../../config/constants');
 
 module.exports = function(app) {
-  app.get('/history-sync', ensureAuthenticated, (req, res) => {
+  app.get(ROUTES.API.HISTORY_SYNC, ensureAuthenticated, (req, res) => {
     const searchParams = new URLSearchParams(req.query);
 
     return uber({
-      method: 'GET',
-      url: `/v1.2/history?${searchParams.toString()}`,
+      method: METHODS.GET,
+      url: `${UBER.ROUTES.HISTORY}?${searchParams.toString()}`,
       token: req.user.accessToken
     })
     .then(results => {

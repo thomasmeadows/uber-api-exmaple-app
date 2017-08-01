@@ -1,6 +1,8 @@
-const ensureAuthenticated = require('./policies/ensureAuthenticated');
-const uber = require('./helpers/uberapi');
 const { URLSearchParams } = require('url');
+
+const ensureAuthenticated = require('../policies/ensureAuthenticated');
+const uber = require('../helpers/uberapi');
+const { ROUTES, METHODS, UBER } = require('../../config/constants');
 
 const FAKE_START_LATITUDE = 40.730610;
 const FAKE_START_LONGITUDE = -73.935242;
@@ -9,14 +11,14 @@ const FAKE_END_LATITUDE = 40.710610;
 const FAKE_END_LONGITUDE = -73.935242;
 
 module.exports = function(app) {
-  app.get('/fake-ride', ensureAuthenticated, (req, res) => {
+  app.get(ROUTES.API.FAKE_RIDE, ensureAuthenticated, (req, res) => {
     const productParams = new URLSearchParams({
       latitude: FAKE_START_LATITUDE,
       longitude: FAKE_START_LONGITUDE
     });
     return uber({
-      method: 'GET',
-      url: `/v1.2/products?${productParams.toString()}`,
+      method: METHODS.GET,
+      url: `${UBER.ROUTES.PRODUCTS}?${productParams.toString()}`,
       token: req.user.accessToken
     })
     .then(productResults => {
@@ -25,8 +27,8 @@ module.exports = function(app) {
       }
       const product_id = productResults.data.products[0].product_id;
       return uber({
-        method: 'POST',
-        url: '/v1.2/requests/estimate',
+        method: METHODS.POST,
+        url: UBER.ROUTES.ESTIMATE,
         token: req.user.accessToken,
         data: {
           product_id: product_id,
@@ -38,10 +40,9 @@ module.exports = function(app) {
       })
       .then(estimateResults => {
         const fare_id = estimateResults.data.fare.fare_id;
-        console.log('product_id', product_id, 'fare_id', fare_id);
         return uber({
-          method: 'POST',
-          url: '/v1.2/requests',
+          method: METHODS.POST,
+          url: UBER.ROUTES.REQUESTS,
           token: req.user.accessToken,
           data: {
             fare_id: fare_id,
@@ -53,21 +54,22 @@ module.exports = function(app) {
           }
         })
         .catch(err => {
-          console.log('error 1', err.response ? err.response.data : err);
+          console.log('error', err.response ? err.response.data : err);
           return uber({
-            method: 'GET',
-            url: '/v1/requests/current',
+            method: METHODS.GET,
+            url: UBER.ROUTES.REQUESTS_CURRENT,
             token: req.user.accessToken
           });
         });
       })
       .then(results => {
-        const statuses = [ 'accepted', 'arriving', 'in_progress', 'completed' ];
+        const { ACCEPTED, ARRIVING, IN_PROGRESS, COMPLETED } = UBER.ROUTE_STATUS;
+        const statuses = [ ACCEPTED, ARRIVING, IN_PROGRESS, COMPLETED ];
 
         function recursiveStatusChange(requestId, statusArray) {
           return uber({
-            method: 'PUT',
-            url: `/v1.2/sandbox/requests/${requestId}`,
+            method: METHODS.PUT,
+            url: `${UBER.ROUTES.SANDBOX_REQUESTS}/${requestId}`,
             token: req.user.accessToken,
             data: {
               status: statusArray[0]
@@ -89,7 +91,7 @@ module.exports = function(app) {
       });
     })
     .catch(err => {
-      console.log('error 2', err.response ? err.response.data : err);
+      console.log('_error', err.response ? err.response.data : err);
     });
   });
 };

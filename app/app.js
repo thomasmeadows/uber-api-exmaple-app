@@ -16,7 +16,7 @@ require('bootstrap');
 
     function recursiveGetHistory(offset) {
       return $.ajax({
-        url: `/history-sync?limit=50&offset=${offset}`
+        url: `/api/history-sync?limit=50&offset=${offset}`
       })
       .then(results => {
         if(results.history && results.history.length === 50) {

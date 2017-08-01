@@ -1,6 +1,8 @@
+const { ROUTES } = require('../config/constants');
+
 module.exports = function(app) {
-  app.get('/logout', (request, response) => {
+  app.get(ROUTES.LOGOUT, (request, response) => {
     request.logout();
-    response.redirect('/login');
+    response.redirect(ROUTES.LOGIN);
   });
 };
