@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const promise = require('bluebird');
 const mongoose = require('mongoose');
 const path = require('path');
+const helmet = require('helmet');
 const express = require('express');
 const MongoDBStore = require('connect-mongodb-session')(session);
 
@@ -41,10 +42,23 @@ module.exports = function(app) {
 
   const expressSessionOptions = {
     secret: EXPRESS_SESSION_SECRET,
+    name: 'express_session_name',
     resave: false,
     store: sessionStore,
     saveUninitialized: true
   };
+
+  if(process.env.NODE_ENV === 'production') {
+    const expiryDate = new Date(Date.now() + 24 * 60 * 60 * 1000);
+
+    app.set('trust proxy', 1);
+    expressSessionOptions.cookie = {
+      secure: true,
+      expires: expiryDate
+    };
+  }
+
+  app.use(helmet());
 
   app.use(session(expressSessionOptions));
   app.use(passport.initialize());
