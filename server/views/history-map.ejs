@@ -4,37 +4,13 @@
 </div>
 <ul class="nav nav-tabs">
   <li class="nav-item"><a class="nav-link" href="/history">History</a></li>
-  <liclass="nav-item"><a class="nav-link active" href="/history-map">History Map</a></li>
+  <li class="nav-item"><a class="nav-link active" href="/history-map">History Map</a></li>
 </ul><br>
 
 <% if(!userHistory.length) { %>
   <h3><strong>No uber user history found.</strong></h3>
 <% } else { %>
-  <div id="map"></div>
-  <script>
-    function initMap() {
-      <% for(var i=0; i < userHistory.length; i++) { %>
-        <% if(i === 0) { %>
-          var mapStartLocation = {
-            lat: <%= userHistory[i].start_city.latitude %>,
-            lng: <%= userHistory[i].start_city.longitude %>
-          };
-          var markers = [];
-          var map = new google.maps.Map(document.getElementById('map'), {
-            zoom: 15,
-            center: mapStartLocation
-          });
-        <% } %>
-        markers.push(new google.maps.Marker({
-          position: {
-            lat: <%= userHistory[i].start_city.latitude %>,
-            lng: <%= userHistory[i].start_city.longitude %>
-          },
-          map: map
-        }));
-      <% } %>
-    }
-  </script>
+  <div class="text-left" id="map"><div id="user-history-loader" class="loader float-left"></div>Loading User History... </div>
   <script async defer
   src="https://maps.googleapis.com/maps/api/js?key=<%= googleMapsToken %>&callback=initMap">
   </script>

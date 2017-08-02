@@ -15,10 +15,6 @@ const plugins = [
   })
 ];
 
-if (process.env.COMPRESS) {
-  plugins.push(new webpack.optimize.UglifyJsPlugin());
-}
-
 module.exports = {
   entry: [
     path.join(__dirname, 'app', 'app.js'),

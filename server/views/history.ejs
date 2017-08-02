@@ -5,41 +5,61 @@
 <ul class="nav nav-tabs">
   <li class="nav-item"><a class="nav-link active" href="/history">History</a></li>
   <li class="nav-item"><a class="nav-link" href="/history-map">History Map</a></li>
-</ul><br>
+</ul>
 
 <% if(!userHistory.length) { %>
-  <h3><strong>No uber user history found.</strong></h3>
+  <br><h3><strong>No uber user history found.</strong></h3>
 <% } else { %>
+  <div class="float-right">
+    <% if(currentPage > 1) { %>
+      <a href="/history?page=<%= Number(currentPage) - 1 %>"><strong>&lt;</strong>&nbsp;Previous</a>
+    <% } %>
+    &nbsp;&nbsp;&nbsp;
+    <% if(currentPage < totalPages) { %>
+      <a href="/history?page=<%= Number(currentPage) + 1 %>">Next&nbsp;<strong>&gt;</strong></a>
+    <% } %>
+  </div>
+  <div class="text-center"><small><i>displaying <%= userHistory.length %> of <%= historyCount %> results on page <%= currentPage %> of <%= totalPages %></i></small></div><br>
+
   <div class="row hidden-md-down">
     <div class="col-lg-3"><strong>Starting Location</strong></div>
     <div class="col-lg-3"><strong>Status</strong></div>
     <div class="col-lg-3"><strong>Request Time</strong></div>
     <div class="col-lg-3"><strong>Complete Time</strong></div>
   </div>
-<% } %>
 
-<% for(var i=0; i < userHistory.length; i++) { %>
-  <hr>
-  <div class="row">
-    <div class="col-lg-3">
-      <strong class="hidden-lg-up">Location:</strong>
-      <%= userHistory[i].start_city.display_name %>
+  <% for(var i=0; i < userHistory.length; i++) { %>
+    <hr>
+    <div class="row">
+      <div class="col-lg-3">
+        <strong class="hidden-lg-up">Location:</strong>
+        <%= userHistory[i].start_city.display_name %>
+      </div>
+      <div class="col-lg-3">
+        <strong class="hidden-lg-up">Status:</strong>
+        <%= userHistory[i].status %>
+      </div>
+      <div class="col-lg-3">
+        <strong class="hidden-lg-up">Requested:</strong>
+        <%= new Date(userHistory[i].start_time) %>
+      </div>
+      <div class="col-lg-3">
+        <strong class="hidden-lg-up">Completed:</strong>
+        <%= new Date(userHistory[i].end_time) %>
+      </div>
     </div>
-    <div class="col-lg-3">
-      <strong class="hidden-lg-up">Status:</strong>
-      <%= userHistory[i].status %>
-    </div>
-    <div class="col-lg-3">
-      <strong class="hidden-lg-up">Requested:</strong>
-      <%= new Date(userHistory[i].start_time) %>
-    </div>
-    <div class="col-lg-3">
-      <strong class="hidden-lg-up">Completed:</strong>
-      <%= new Date(userHistory[i].end_time) %>
-    </div>
+
+  <% } %>
+
+  <div class="text-right">
+    <% if(currentPage > 1) { %>
+      <a href="/history?page=<%= Number(currentPage) - 1 %>"><strong>&lt;</strong>&nbsp;Previous</a>
+    <% } %>
+    &nbsp;&nbsp;&nbsp;
+    <% if(currentPage < totalPages) { %>
+      <a href="/history?page=<%= Number(currentPage) + 1 %>">Next&nbsp;<strong>&gt;</strong></a>
+    <% } %>
   </div>
-
-
 <% } %>
 
 <%- include partials/foot %>

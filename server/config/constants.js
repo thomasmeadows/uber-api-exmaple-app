@@ -20,7 +20,9 @@ CONSTANTS.METHODS = {
 CONSTANTS.ROUTES = {
   API: {
     FAKE_RIDE: '/api/fake-ride',
+    FAKE_HISTORY: '/api/fake-history',
     HISTORY_SYNC: '/api/history-sync',
+    HISTORY: '/api/history'
   },
   HISTORY: '/history',
   HISTORY_MAP: '/history-map',

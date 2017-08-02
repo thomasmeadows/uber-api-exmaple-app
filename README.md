@@ -1,3 +1,5 @@
+[![codebeat badge](https://codebeat.co/badges/d6168224-7ab8-4ee3-9ce0-767c8940ff46)](https://codebeat.co/projects/github-com-thomasmeadows-uber-api-exmaple-app-master)
+
 # uber-api-exmaple-app
 
 Uber API Example with Express, Mongo, and EJS

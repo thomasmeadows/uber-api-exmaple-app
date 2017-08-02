@@ -6004,7 +6004,7 @@ video {
   height: auto;
   z-index: -100;
   transform: translateX(-50%) translateY(-50%);
-  background: url("//ocean.jpg") no-repeat;
+  background: url("/ocean.jpg") no-repeat;
   background-size: cover;
   transition: 1s opacity; }
 
@@ -6054,11 +6054,12 @@ video {
   border-top: 2px solid #3498db;
   width: 20px;
   height: 20px;
-  margin: 0px 5px;
+  margin: 2px 5px;
   float: right;
   clear: both;
   -webkit-animation: spin 2s linear infinite;
-  animation: spin 2s linear infinite; }
+  animation: spin 2s linear infinite;
+  display: none; }
 
 @-webkit-keyframes spin {
   0% {
