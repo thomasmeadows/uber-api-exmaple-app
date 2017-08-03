@@ -5,7 +5,7 @@ module.exports = function(app) {
   app.get(ROUTES.API.HISTORY, ensureAuthenticated, (req, res) => {
     return app.models.History.find({ user: req.user._id })
     .limit(50)
-    .skip(req.query.skip)
+    .skip(Number(req.query.skip))
     .then(userHistoryFound => {
       return res.send(userHistoryFound);
     })

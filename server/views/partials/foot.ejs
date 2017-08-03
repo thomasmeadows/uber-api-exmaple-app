@@ -1,3 +1,9 @@
   </div>
+  <script type="text/javascript" src="browser.js?cacheVersion=<%= cacheVersion %>"></script>
+  <% if(includeGoogleMapsScript) { %>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=<%= googleMapsToken %>&callback=initMap">
+    </script>
+  <% } %>
 </body>
 </html>

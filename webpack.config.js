@@ -15,6 +15,16 @@ const plugins = [
   })
 ];
 
+if (process.env.COMPRESS) {
+  plugins.push(new webpack.optimize.UglifyJsPlugin({
+    mangle: {
+      except: [
+        '$', 'jQuery', 'Tether', 'bootstrap'
+      ]
+    }
+  }));
+}
+
 module.exports = {
   entry: [
     path.join(__dirname, 'app', 'app.js'),

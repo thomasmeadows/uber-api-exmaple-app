@@ -3,6 +3,7 @@ module.exports = exports = {
     "browser": true
   },
   "globals": {
+    "$": true,
     "jQuery": true,
     "google": true
   }
